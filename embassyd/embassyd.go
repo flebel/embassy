@@ -8,11 +8,18 @@ import (
 )
 
 func JsonIpHandler(w http.ResponseWriter, r *http.Request) {
-	w.Write([]byte(ambassador.Name + "\n"))
+	statusCode, contentType, body, err := ambassador.Perform()
+	w.WriteHeader(statusCode)
+	w.Header().Set("Content-Type", contentType)
+	if err != nil {
+		w.Write([]byte("Error: " + err.Error()))
+	} else {
+		w.Write(body)
+	}
 }
 
 func StartNewEmbassyD() {
 	r := mux.NewRouter()
-	r.HandleFunc("/jsonip", JsonIpHandler)
-	http.ListenAndServe(":8000", r)
+	r.HandleFunc("/external_ip", JsonIpHandler)
+	http.ListenAndServe("localhost:8000", r)
 }
