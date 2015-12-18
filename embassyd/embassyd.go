@@ -3,12 +3,12 @@ package embassyd
 import (
 	"net/http"
 
-	"github.com/flebel/embassy/ambassadors/url"
+	jsonip "github.com/flebel/embassy/ambassadors/jsonip"
 	"github.com/gorilla/mux"
 )
 
 func JsonIpHandler(w http.ResponseWriter, r *http.Request) {
-	statusCode, contentType, body, err := ambassador.Perform()
+	statusCode, contentType, body, err := jsonip.Perform()
 	w.WriteHeader(statusCode)
 	w.Header().Set("Content-Type", contentType)
 	if err != nil {
