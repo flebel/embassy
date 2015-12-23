@@ -1,6 +1,7 @@
 package embassyd
 
 import (
+	"fmt"
 	"net/http"
 
 	jsonip "github.com/flebel/embassy/ambassadors/jsonip"
@@ -8,6 +9,21 @@ import (
 )
 
 func JsonIpHandler(w http.ResponseWriter, r *http.Request) {
+	defer func() {
+		if e := recover(); e != nil {
+			var err string
+			switch x := e.(type) {
+			case string:
+				err = x
+			default:
+				err = fmt.Sprintf("%v", x)
+			}
+			w.WriteHeader(500)
+			w.Header().Set("Content-Type", "text/plain")
+			w.Write([]byte(err))
+		}
+	}()
+
 	statusCode, contentType, body, err := jsonip.Perform()
 	w.WriteHeader(statusCode)
 	w.Header().Set("Content-Type", contentType)
