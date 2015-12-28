@@ -34,8 +34,8 @@ func JsonIpHandler(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
-func StartNewEmbassyD() {
+func StartNewEmbassyD(listen string) {
 	r := mux.NewRouter()
 	r.HandleFunc("/external_ip", JsonIpHandler)
-	http.ListenAndServe("localhost:8000", r)
+	http.ListenAndServe(listen, r)
 }
