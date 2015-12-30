@@ -4,11 +4,13 @@ import (
 	"encoding/json"
 	"os"
 
+	"github.com/flebel/embassy/ambassadors"
 	"github.com/flebel/embassy/embassyd"
 )
 
 type Configuration struct {
-	Listen string
+	Ambassadors []config.Ambassador
+	Listen      string
 }
 
 func loadConfig(filename string) Configuration {
@@ -24,5 +26,5 @@ func loadConfig(filename string) Configuration {
 
 func main() {
 	config := loadConfig("config.json")
-	embassyd.StartNewEmbassyD(config.Listen)
+	embassyd.StartNewEmbassyD(config.Ambassadors, config.Listen)
 }

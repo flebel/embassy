@@ -1,3 +1,16 @@
 {
+  "Ambassadors": [
+      {
+          "Ambassador": "generic",
+          "Path": "/jsonip1",
+          "Url": "http://jsonip.com",
+          "HTTPVerb": "GET"
+      },
+      {
+          "Ambassador": "jsonip",
+          "Path": "/jsonip2"
+      }
+
+  ],
   "Listen": "localhost:8000"
 }
