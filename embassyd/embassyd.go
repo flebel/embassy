@@ -10,21 +10,23 @@ import (
 	"github.com/gorilla/mux"
 )
 
-func JsonIpHandler(w http.ResponseWriter, r *http.Request) {
-	defer func() {
-		if e := recover(); e != nil {
-			var err string
-			switch x := e.(type) {
-			case string:
-				err = x
-			default:
-				err = fmt.Sprintf("%v", x)
-			}
-			w.WriteHeader(500)
-			w.Header().Set("Content-Type", "text/plain")
-			w.Write([]byte(err))
+var ErrorHandler = func(w http.ResponseWriter) {
+	if e := recover(); e != nil {
+		var err string
+		switch x := e.(type) {
+		case string:
+			err = x
+		default:
+			err = fmt.Sprintf("%v", x)
 		}
-	}()
+		w.WriteHeader(500)
+		w.Header().Set("Content-Type", "text/plain")
+		w.Write([]byte(err))
+	}
+}
+
+func JsonIpHandler(w http.ResponseWriter, r *http.Request) {
+	defer ErrorHandler(w)
 
 	statusCode, contentType, body, err := jsonip.Perform()
 	w.WriteHeader(statusCode)
@@ -38,20 +40,7 @@ func JsonIpHandler(w http.ResponseWriter, r *http.Request) {
 
 func GenericHandler(ambassador config.Ambassador) func(w http.ResponseWriter, r *http.Request) {
 	return func(w http.ResponseWriter, r *http.Request) {
-		defer func() {
-			if e := recover(); e != nil {
-				var err string
-				switch x := e.(type) {
-				case string:
-					err = x
-				default:
-					err = fmt.Sprintf("%v", x)
-				}
-				w.WriteHeader(500)
-				w.Header().Set("Content-Type", "text/plain")
-				w.Write([]byte(err))
-			}
-		}()
+		defer ErrorHandler(w)
 
 		statusCode, contentType, body, err := generic.Perform(ambassador)
 		w.WriteHeader(statusCode)
