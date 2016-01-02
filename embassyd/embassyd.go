@@ -57,9 +57,10 @@ func StartNewEmbassyD(ambassadors []config.Ambassador, listen string) {
 	r := mux.NewRouter()
 	for _, ambassador := range ambassadors {
 		var handler interface{} = nil
-		if ambassador.Ambassador == "generic" {
+		switch ambassador.Ambassador {
+		case generic.Name:
 			handler = GenericHandler(ambassador)
-		} else if ambassador.Ambassador == "jsonip" {
+		case jsonip.Name:
 			handler = JsonIpHandler
 		}
 		if handler != nil {

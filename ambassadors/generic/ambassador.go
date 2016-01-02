@@ -7,7 +7,7 @@ import (
 	"github.com/flebel/embassy/ambassadors"
 )
 
-var Name = "generic"
+const Name = "generic"
 
 func Perform(ambassador config.Ambassador) (int, string, []byte, error) {
 	fetch := config.HTTPVerbFunctionMap[ambassador.HTTPVerb].(func(string) (*http.Response, error))

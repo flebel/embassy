@@ -5,7 +5,7 @@ import (
 	"net/http"
 )
 
-var Name = "jsonip"
+const Name = "jsonip"
 
 func Perform() (int, string, []byte, error) {
 	resp, err := http.Get("http://jsonip.com")
