@@ -3,7 +3,7 @@
       {
           "Ambassador": "generic",
           "Path": "/jsonip1",
-          "Url": "http://jsonip.com",
+          "URL": "http://jsonip.com",
           "HTTPVerb": "GET"
       },
       {

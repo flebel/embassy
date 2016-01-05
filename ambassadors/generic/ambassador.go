@@ -11,7 +11,7 @@ const Name = "generic"
 
 func Perform(ambassador config.Ambassador) (int, string, []byte, error) {
 	fetch := config.HTTPVerbFunctionMap[ambassador.HTTPVerb].(func(string) (*http.Response, error))
-	resp, err := fetch(ambassador.Url)
+	resp, err := fetch(ambassador.URL)
 	defer resp.Body.Close()
 	if err != nil {
 		return http.StatusInternalServerError, "", nil, err

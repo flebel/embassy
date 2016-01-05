@@ -7,7 +7,7 @@ import (
 type Ambassador struct {
 	Ambassador string
 	Path       string
-	Url        string
+	URL        string
 	HTTPVerb   string
 }
 
