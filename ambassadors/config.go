@@ -13,5 +13,6 @@ type Ambassador struct {
 
 var HTTPVerbFunctionMap = map[string]interface{}{
 	"GET":  http.Get,
+	"HEAD": http.Head,
 	"POST": http.Post,
 }
