@@ -9,9 +9,27 @@ import (
 
 const Name = "generic"
 
-func Perform(ambassador config.Ambassador) (int, string, []byte, error) {
-	fetch := config.HTTPVerbFunctionMap[ambassador.HTTPVerb].(func(string) (*http.Response, error))
-	resp, err := fetch(ambassador.URL)
+type Configuration struct {
+	URL      string
+	HTTPVerb string
+}
+
+func parseConfiguration(amb config.Ambassador) Configuration {
+	fields := config.ParseConfiguration(amb.Configuration)
+	conf := Configuration{}
+	for k, v := range fields {
+		err := config.SetField(&conf, k, v)
+		if err != nil {
+			panic(err)
+		}
+	}
+	return conf
+}
+
+func Perform(amb config.Ambassador) (int, string, []byte, error) {
+	conf := parseConfiguration(amb)
+	fetch := config.HTTPVerbFunctionMap[conf.HTTPVerb].(func(string) (*http.Response, error))
+	resp, err := fetch(conf.URL)
 	defer resp.Body.Close()
 	if err != nil {
 		return http.StatusInternalServerError, "", nil, err

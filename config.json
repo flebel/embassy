@@ -3,8 +3,11 @@
       {
           "Ambassador": "generic",
           "Path": "/jsonip1",
-          "URL": "http://jsonip.com",
-          "HTTPVerb": "GET"
+          "HTTPVerb": "GET",
+          "Configuration": {
+              "URL": "http://jsonip.com",
+              "HTTPVerb": "GET"
+          }
       },
       {
           "Ambassador": "jsonip",
