@@ -14,20 +14,10 @@ type Configuration struct {
 	HTTPVerb string
 }
 
-func parseConfiguration(amb config.Ambassador) Configuration {
-	fields := config.ParseConfiguration(amb.Configuration)
-	conf := Configuration{}
-	for k, v := range fields {
-		err := config.SetField(&conf, k, v)
-		if err != nil {
-			panic(err)
-		}
-	}
-	return conf
-}
-
 func Perform(amb config.Ambassador) (int, string, []byte, error) {
-	conf := parseConfiguration(amb)
+	conf := Configuration{}
+	config.ParseConfiguration(amb.Configuration, &conf)
+
 	fetch := config.HTTPVerbFunctionMap[conf.HTTPVerb].(func(string) (*http.Response, error))
 	resp, err := fetch(conf.URL)
 	defer resp.Body.Close()

@@ -44,11 +44,17 @@ func SetField(obj interface{}, name string, value interface{}) error {
 	return nil
 }
 
-func ParseConfiguration(jsonData json.RawMessage) map[string]string {
-	config := map[string]string{}
-	err := json.Unmarshal([]byte(jsonData), &config)
+func ParseConfiguration(jsonData json.RawMessage, obj interface{}) interface{} {
+	fields := map[string]string{}
+	err := json.Unmarshal([]byte(jsonData), &fields)
 	if err != nil {
 		panic(err)
 	}
-	return config
+	for k, v := range fields {
+		err := SetField(obj, k, v)
+		if err != nil {
+			panic(err)
+		}
+	}
+	return obj
 }
