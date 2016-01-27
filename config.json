@@ -11,7 +11,8 @@
       },
       {
           "Ambassador": "jsonip",
-          "Path": "/jsonip2"
+          "Path": "/jsonip2",
+          "HTTPVerb": "GET"
       }
 
   ],

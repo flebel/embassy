@@ -64,7 +64,7 @@ func StartNewEmbassyD(ambassadors []config.Ambassador, listen string) {
 			handler = JsonIpHandler
 		}
 		if handler != nil {
-			r.HandleFunc(ambassador.Path, handler.(func(w http.ResponseWriter, r *http.Request)))
+			r.HandleFunc(ambassador.Path, handler.(func(w http.ResponseWriter, r *http.Request))).Methods(ambassador.HTTPVerb)
 		}
 	}
 	http.ListenAndServe(listen, r)
