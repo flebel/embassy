@@ -14,6 +14,14 @@ As IoT devices become mainstream, deployments are likely to experience an unheal
 
 # Usage
 
+A minimum of 3 settings must be set for every ambassador:
+
+        Ambassador    The name of the ambassador, as found in the ambassador's `Name` constant
+        Path          Path at which the ambassador endpoint should be exposed
+        HTTPVerb      HTTP verb at which the ambassador endpoint should be exposed, only `GET`, `HEAD` and `POST` are supported at this time
+
+A fourth setting named `Configuration` can be required by an ambassador. Consult the ambassador's documentation and code for the available settings.
+
 ## Built-in ambassadors
 
 Embassy comes with a generic ambassador that allows for creating simple API gateways from a JSON configuration file, and an ambassador for the `jsonip.com` service. The `config.json` file contains an example of how to use either ambassador, with the generic ambassador configured to query `jsonip.com`, essentially resulting in an identical behavior and HTTP response for those two ambassadors.
