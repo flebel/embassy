@@ -24,7 +24,7 @@ A fourth setting named `Configuration` can be required by an ambassador. Consult
 
 ## Built-in ambassadors
 
-Embassy comes with a generic ambassador that allows for creating simple API gateways from a JSON configuration file, and an ambassador for the `jsonip.com` service. The `config.json` file contains an example of how to use either ambassador, with the generic ambassador configured to query `jsonip.com`, essentially resulting in an identical behavior and HTTP response for those two ambassadors.
+Embassy comes with a generic ambassador that allows creating simple API gateways from a JSON configuration file, and an ambassador for the `jsonip.com` service. The `config.json` file contains an example of how to use either ambassador, with the generic ambassador configured to query `jsonip.com`, essentially resulting in an identical behavior and HTTP response for those two ambassadors.
 
 ## Using the generic ambassador
 
