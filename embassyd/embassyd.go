@@ -11,6 +11,8 @@ import (
 	"github.com/gorilla/mux"
 )
 
+type simplePerformer func() (int, string, []byte, error)
+
 var ErrorHandler = func(w http.ResponseWriter) {
 	if e := recover(); e != nil {
 		var err string
@@ -23,32 +25,6 @@ var ErrorHandler = func(w http.ResponseWriter) {
 		w.WriteHeader(500)
 		w.Header().Set("Content-Type", "text/plain")
 		w.Write([]byte(err))
-	}
-}
-
-func JsonIpHandler(w http.ResponseWriter, r *http.Request) {
-	defer ErrorHandler(w)
-
-	statusCode, contentType, body, err := jsonip.Perform()
-	w.WriteHeader(statusCode)
-	w.Header().Set("Content-Type", contentType)
-	if err != nil {
-		w.Write([]byte("Error: " + err.Error()))
-	} else {
-		w.Write(body)
-	}
-}
-
-func PingHandler(w http.ResponseWriter, r *http.Request) {
-	defer ErrorHandler(w)
-
-	statusCode, contentType, body, err := ping.Perform()
-	w.WriteHeader(statusCode)
-	w.Header().Set("Content-Type", contentType)
-	if err != nil {
-		w.Write([]byte("Error: " + err.Error()))
-	} else {
-		w.Write(body)
 	}
 }
 
@@ -67,6 +43,21 @@ func GenericHandler(ambassador config.Ambassador) func(w http.ResponseWriter, r 
 	}
 }
 
+func SimpleHandler(perform simplePerformer) func(w http.ResponseWriter, r *http.Request) {
+	return func(w http.ResponseWriter, r *http.Request) {
+		defer ErrorHandler(w)
+
+		statusCode, contentType, body, err := perform()
+		w.WriteHeader(statusCode)
+		w.Header().Set("Content-Type", contentType)
+		if err != nil {
+			w.Write([]byte("Error: " + err.Error()))
+		} else {
+			w.Write(body)
+		}
+	}
+}
+
 func StartNewEmbassyD(ambassadors []config.Ambassador, listen string) {
 	r := mux.NewRouter()
 	for _, ambassador := range ambassadors {
@@ -75,9 +66,9 @@ func StartNewEmbassyD(ambassadors []config.Ambassador, listen string) {
 		case generic.Name:
 			handler = GenericHandler(ambassador)
 		case jsonip.Name:
-			handler = JsonIpHandler
+			handler = SimpleHandler(jsonip.Perform)
 		case ping.Name:
-			handler = PingHandler
+			handler = SimpleHandler(ping.Perform)
 		}
 		if handler != nil {
 			r.HandleFunc(ambassador.Path, handler.(func(w http.ResponseWriter, r *http.Request))).Methods(ambassador.HTTPVerb)
