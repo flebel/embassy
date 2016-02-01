@@ -13,6 +13,11 @@
           "Ambassador": "jsonip",
           "Path": "/jsonip2",
           "HTTPVerb": "GET"
+      },
+      {
+          "Ambassador": "ping",
+          "Path": "/ping",
+          "HTTPVerb": "GET"
       }
 
   ],

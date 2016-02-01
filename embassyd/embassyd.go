@@ -7,6 +7,7 @@ import (
 	"github.com/flebel/embassy/ambassadors"
 	generic "github.com/flebel/embassy/ambassadors/generic"
 	jsonip "github.com/flebel/embassy/ambassadors/jsonip"
+	ping "github.com/flebel/embassy/ambassadors/ping"
 	"github.com/gorilla/mux"
 )
 
@@ -29,6 +30,19 @@ func JsonIpHandler(w http.ResponseWriter, r *http.Request) {
 	defer ErrorHandler(w)
 
 	statusCode, contentType, body, err := jsonip.Perform()
+	w.WriteHeader(statusCode)
+	w.Header().Set("Content-Type", contentType)
+	if err != nil {
+		w.Write([]byte("Error: " + err.Error()))
+	} else {
+		w.Write(body)
+	}
+}
+
+func PingHandler(w http.ResponseWriter, r *http.Request) {
+	defer ErrorHandler(w)
+
+	statusCode, contentType, body, err := ping.Perform()
 	w.WriteHeader(statusCode)
 	w.Header().Set("Content-Type", contentType)
 	if err != nil {
@@ -62,6 +76,8 @@ func StartNewEmbassyD(ambassadors []config.Ambassador, listen string) {
 			handler = GenericHandler(ambassador)
 		case jsonip.Name:
 			handler = JsonIpHandler
+		case ping.Name:
+			handler = PingHandler
 		}
 		if handler != nil {
 			r.HandleFunc(ambassador.Path, handler.(func(w http.ResponseWriter, r *http.Request))).Methods(ambassador.HTTPVerb)
