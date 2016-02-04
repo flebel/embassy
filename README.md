@@ -41,3 +41,9 @@ Embassy comes pre-configured with `generic` and `jsonip` ambassadors. Both ambas
 
 The `jsonip` ambassador can be used as a template for writing a simple custom ambassador to support functionality lacking in the `generic` ambassador.
 
+Ambassadors are expected to provide a constant `Name` to be looked up in `embassyd/embassyd.go` when routing a HTTP request. The ambassador must also be defined in the `StartNewEmbassyD` function of `embassyd/embassyd.go`.
+
+### Custom configuration
+
+TODO: See the `Configuration` struct of the `generic` ambassador.
+
