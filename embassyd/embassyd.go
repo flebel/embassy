@@ -13,7 +13,7 @@ import (
 
 type simplePerformer func() (int, string, []byte, error)
 
-var ErrorHandler = func(w http.ResponseWriter) {
+var errorHandler = func(w http.ResponseWriter) {
 	if e := recover(); e != nil {
 		var err string
 		switch x := e.(type) {
@@ -30,7 +30,7 @@ var ErrorHandler = func(w http.ResponseWriter) {
 
 func GenericHandler(ambassador config.Ambassador) func(w http.ResponseWriter, r *http.Request) {
 	return func(w http.ResponseWriter, r *http.Request) {
-		defer ErrorHandler(w)
+		defer errorHandler(w)
 
 		statusCode, contentType, body, err := generic.Perform(ambassador)
 		w.WriteHeader(statusCode)
@@ -45,7 +45,7 @@ func GenericHandler(ambassador config.Ambassador) func(w http.ResponseWriter, r 
 
 func SimpleHandler(perform simplePerformer) func(w http.ResponseWriter, r *http.Request) {
 	return func(w http.ResponseWriter, r *http.Request) {
-		defer ErrorHandler(w)
+		defer errorHandler(w)
 
 		statusCode, contentType, body, err := perform()
 		w.WriteHeader(statusCode)
