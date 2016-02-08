@@ -13,6 +13,11 @@ import (
 
 type simplePerformer func() (int, string, []byte, error)
 
+var performers = map[string]simplePerformer{
+	jsonip.Name: jsonip.Perform,
+	ping.Name:   ping.Perform,
+}
+
 var errorHandler = func(w http.ResponseWriter) {
 	if e := recover(); e != nil {
 		var err string
@@ -62,13 +67,10 @@ func StartNewEmbassyD(ambassadors []config.Ambassador, listen string) {
 	r := mux.NewRouter()
 	for _, ambassador := range ambassadors {
 		var handler interface{} = nil
-		switch ambassador.Ambassador {
-		case generic.Name:
+		if ambassador.Ambassador == generic.Name {
 			handler = GenericHandler(ambassador)
-		case jsonip.Name:
-			handler = SimpleHandler(jsonip.Perform)
-		case ping.Name:
-			handler = SimpleHandler(ping.Perform)
+		} else {
+			handler = SimpleHandler(performers[ambassador.Ambassador])
 		}
 		if handler != nil {
 			r.HandleFunc(ambassador.Path, handler.(func(w http.ResponseWriter, r *http.Request))).Methods(ambassador.HTTPVerb)
