@@ -45,5 +45,19 @@ Ambassadors are expected to provide a constant `Name` to be looked up in `embass
 
 ### Custom configuration
 
-TODO: See the `Configuration` struct of the `generic` ambassador.
+A custom configuration structure can be used provided it is named `Configuration` in the JSON configuration file.
+
+Given this configuration structure,
+
+        type Configuration struct {
+                FirstCustomConfig  string
+                SecondCustomConfig int
+        }
+
+you can unserialize it into your ambassador's configuration structure with `config.ParseConfiguration`:
+
+        conf := Configuration{}
+        config.ParseConfiguration(amb.Configuration, &conf)
+
+Refer to the `generic` ambassador for a practical example.
 
