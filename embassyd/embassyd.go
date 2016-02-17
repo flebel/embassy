@@ -11,7 +11,7 @@ import (
 	"github.com/gorilla/mux"
 )
 
-type simplePerformer func() (int, string, []byte, error)
+type simplePerformer func(config.Ambassador) (int, string, []byte, error)
 
 var performers = map[string]simplePerformer{
 	jsonip.Name: jsonip.Perform,
@@ -48,11 +48,11 @@ func GenericHandler(ambassador config.Ambassador) func(w http.ResponseWriter, r 
 	}
 }
 
-func SimpleHandler(perform simplePerformer) func(w http.ResponseWriter, r *http.Request) {
+func SimpleHandler(perform simplePerformer, amb config.Ambassador) func(w http.ResponseWriter, r *http.Request) {
 	return func(w http.ResponseWriter, r *http.Request) {
 		defer errorHandler(w)
 
-		statusCode, contentType, body, err := perform()
+		statusCode, contentType, body, err := perform(amb)
 		w.WriteHeader(statusCode)
 		w.Header().Set("Content-Type", contentType)
 		if err != nil {
@@ -70,7 +70,7 @@ func StartNewEmbassyD(ambassadors []config.Ambassador, listen string) {
 		if ambassador.Ambassador == generic.Name {
 			handler = GenericHandler(ambassador)
 		} else {
-			handler = SimpleHandler(performers[ambassador.Ambassador])
+			handler = SimpleHandler(performers[ambassador.Ambassador], ambassador)
 		}
 		if handler != nil {
 			r.HandleFunc(ambassador.Path, handler.(func(w http.ResponseWriter, r *http.Request))).Methods(ambassador.HTTPVerb)
