@@ -26,6 +26,13 @@ A fourth setting named `Configuration` can be required by an ambassador. Consult
 
 Embassy comes with a generic ambassador that allows creating simple API gateways from a JSON configuration file, a `ping` ambassador and other ambassadors for third party services. The `config.json` file contains an example of how to use either ambassador, with the generic ambassador configured to query `jsonip.com`, essentially resulting in an identical behavior and HTTP response with the `jsonip` ambassador.
 
+Available ambassadors::
+
+* `generic`: JSON-configurable ambassador for simple scenarios. Returns response from `URL`. Refer to `Using the generic ambassador` for more information.
+* `jsonip`: Returns Embassy's Internet-routable IP address, as reported by http://jsonip.com
+* `ping`: Returns `Pong!` if Embassy is accessible.
+* `pushover`: Basic support for sending a push notification through the http://pushover.net service.
+
 ## Using the generic ambassador
 
 The `generic` ambassador can be used for simple one off communications over HTTP and accepts an URL and HTTP verb over which a request should be made. Support for passing custom headers and form data is on the roadmap.

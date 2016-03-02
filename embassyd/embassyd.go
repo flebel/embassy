@@ -8,14 +8,16 @@ import (
 	generic "github.com/flebel/embassy/ambassadors/generic"
 	jsonip "github.com/flebel/embassy/ambassadors/jsonip"
 	ping "github.com/flebel/embassy/ambassadors/ping"
+	pushover "github.com/flebel/embassy/ambassadors/pushover"
 	"github.com/gorilla/mux"
 )
 
 type simplePerformer func(config.Ambassador) (int, string, []byte, error)
 
 var performers = map[string]simplePerformer{
-	jsonip.Name: jsonip.Perform,
-	ping.Name:   ping.Perform,
+	jsonip.Name:   jsonip.Perform,
+	ping.Name:     ping.Perform,
+	pushover.Name: pushover.Perform,
 }
 
 var errorHandler = func(w http.ResponseWriter) {

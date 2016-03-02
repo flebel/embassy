@@ -18,6 +18,17 @@
           "Ambassador": "ping",
           "Path": "/ping",
           "HTTPVerb": "GET"
+      },
+      {
+          "Ambassador": "pushover",
+          "Path": "/pushover",
+          "HTTPVerb": "GET",
+          "Configuration": {
+            "Message": "This is a test message.",
+            "Token": "PUSHOVER_APPLICATION_TOKEN_ID",
+            "User": "PUSHOVER_USER_ID"
+          }
+
       }
 
   ],
