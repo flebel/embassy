@@ -1,7 +1,6 @@
 package ambassador
 
 import (
-	"io/ioutil"
 	"net/http"
 	"net/url"
 
@@ -23,12 +22,5 @@ func Perform(amb config.Ambassador) (int, string, []byte, error) {
 	resp, err := http.PostForm("https://api.pushover.net/1/messages.json",
 		url.Values{"token": {conf.Token}, "user": {conf.User}, "message": {conf.Message}})
 	defer resp.Body.Close()
-	if err != nil {
-		return http.StatusInternalServerError, "", nil, err
-	}
-	body, err := ioutil.ReadAll(resp.Body)
-	if err != nil {
-		return http.StatusInternalServerError, "", nil, err
-	}
-	return resp.StatusCode, resp.Header["Content-Type"][0], body, nil
+	return config.HandleResponse(resp, err)
 }

@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 	"errors"
 	"fmt"
+	"io/ioutil"
 	"net/http"
 	"reflect"
 )
@@ -19,6 +20,17 @@ var HTTPVerbFunctionMap = map[string]interface{}{
 	"GET":  http.Get,
 	"HEAD": http.Head,
 	"POST": http.Post,
+}
+
+func HandleResponse(resp *http.Response, err error) (int, string, []byte, error) {
+	if err != nil {
+		return http.StatusInternalServerError, "", nil, err
+	}
+	body, err := ioutil.ReadAll(resp.Body)
+	if err != nil {
+		return http.StatusInternalServerError, "", nil, err
+	}
+	return resp.StatusCode, resp.Header["Content-Type"][0], body, nil
 }
 
 // http://stackoverflow.com/a/26746461
