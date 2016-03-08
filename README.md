@@ -14,6 +14,8 @@ As IoT devices become mainstream, deployments are likely to experience an unheal
 
 # Usage
 
+Embassy uses a configuration file in JSON format to define its active endpoints. Unless specified using the `-config` flag, the configuration file should be named `config.json` and reside at the root of the Embassy project. For convenience, a `config.json` file with example endpoints is included with the project.
+
 A minimum of 3 settings must be set for every ambassador:
 
         Ambassador    The name of the ambassador, as found in the ambassador's `Name` constant

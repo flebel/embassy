@@ -2,6 +2,7 @@ package main
 
 import (
 	"encoding/json"
+	"flag"
 	"os"
 
 	"github.com/flebel/embassy/ambassadors"
@@ -25,6 +26,8 @@ func loadConfig(filename string) Configuration {
 }
 
 func main() {
-	config := loadConfig("config.json")
+	configFile := flag.String("conf", "config.json", "Configuration file")
+	flag.Parse()
+	config := loadConfig(*configFile)
 	embassyd.StartNewEmbassyD(config.Ambassadors, config.Listen)
 }
